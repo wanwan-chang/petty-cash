@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>企業級零用金報帳系統</title>
+    <title>零用金報帳系統ww</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -38,24 +38,45 @@
         .form-group label { display: block; font-weight: 600; margin-bottom: 8px; color: #475569; font-size: 14px; }
         .form-group label i { margin-right: 6px; color: var(--primary); }
 
+        /* 稅金開關置右樣式 */
+        .tax-label-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .switch-container {
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+            color: #64748b;
+            cursor: pointer;
+        }
+        .switch-container input {
+            width: auto;
+            margin-right: 6px;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+
         input, select, textarea { 
             width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 12px;
             font-size: 16px; box-sizing: border-box; transition: all 0.3s; background: #f8fafc;
         }
         input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
         
-        .amount-input { font-size: 22px; font-weight: bold; color: var(--primary); text-align: center; }
+        .amount-input { font-size: 22px; font-weight: bold; color: var(--text); text-align: center; }
         .tax-input { font-size: 22px; font-weight: bold; color: #e11d48; text-align: center; }
+        .total-input { font-size: 24px; font-weight: bold; color: #16a34a; text-align: center; background: #f0fdf4; border-color: #bbf7d0; }
 
         .file-upload { 
             border: 2px dashed #cbd5e1; border-radius: 12px; padding: 15px; text-align: center; cursor: pointer;
-            transition: 0.3s; background: #f8fafc;
+            transition: 0.3s; background: #f8fafc; display: block;
         }
         .file-upload:active { background: #f1f5f9; border-color: var(--primary); }
         .file-upload i { font-size: 24px; color: #64748b; margin-bottom: 5px; }
         .file-upload span { display: block; font-size: 13px; color: #64748b; }
         input[type="file"] { display: none; }
-        .file-name { font-size: 12px; color: var(--primary); margin-top: 5px; font-weight: bold; }
+        .file-name { font-size: 12px; color: var(--primary); margin-top: 5px; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
         button { 
             width: 100%; padding: 16px; background: var(--primary); color: white; border: none; 
@@ -77,8 +98,8 @@
 
     <div class="app-card">
         <div class="header">
-            <i class="fas fa-wallet"></i>
-            <h1>零用金報帳系統 (稅金分流版)</h1>
+            <i class="fas fa-calculator"></i>
+            <h1>零用金報帳系統ww</h1>
         </div>
 
         <form id="pettyCashForm">
@@ -124,13 +145,23 @@
             </div>
 
             <div class="form-group">
-                <label><i class="fas fa-calculator"></i> 未稅金額</label>
-                <input type="number" id="amount" class="amount-input" inputmode="numeric" placeholder="0" required oninput="calculateTax()">
+                <label><i class="fas fa-coins"></i> 未稅金額</label>
+                <input type="number" id="amount" class="amount-input" inputmode="numeric" placeholder="0" required oninput="calculateAll()">
             </div>
 
             <div class="form-group">
-                <label><i class="fas fa-percent"></i> 稅金 <span class="hint">(輸入未稅自動算 5%，可手動改)</span></label>
-                <input type="number" id="tax" class="tax-input" inputmode="numeric" placeholder="0" required>
+                <div class="tax-label-container">
+                    <label><i class="fas fa-percent"></i> 稅金</label>
+                    <label class="switch-container">
+                        <input type="checkbox" id="taxToggle" onchange="calculateAll()"> 需要計算稅金(5%)
+                    </label>
+                </div>
+                <input type="number" id="tax" class="tax-input" inputmode="numeric" value="0" placeholder="0" required oninput="calculateTotalOnly()">
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-money-check-alt"></i> 總金額 (未稅 + 稅金)</label>
+                <input type="number" id="total" class="total-input" readonly value="0">
             </div>
 
             <div class="form-group">
@@ -142,20 +173,20 @@
                 <label><i class="fas fa-camera"></i> 單據/發票照片 (必填)</label>
                 <label for="receipt" class="file-upload">
                     <i class="fas fa-receipt"></i>
-                    <span>點擊拍攝發票</span>
+                    <span>點擊拍照或從相簿上傳</span>
                     <div id="receiptName" class="file-name"></div>
                 </label>
-                <input type="file" id="receipt" accept="image/*" capture="camera" required onchange="showName('receipt')">
+                <input type="file" id="receipt" accept="image/*" required onchange="showName('receipt')">
             </div>
 
             <div class="form-group">
-                <label><i class="fas fa-image"></i> 現場照片 (選填)</label>
+                <label><i class="fas fa-image"></i> 照片 (選填)</label>
                 <label for="photo" class="file-upload">
                     <i class="fas fa-images"></i>
-                    <span>點擊拍攝現場</span>
+                    <span>點擊拍照或從相簿上傳</span>
                     <div id="photoName" class="file-name"></div>
                 </label>
-                <input type="file" id="photo" accept="image/*" capture="camera" onchange="showName('photo')">
+                <input type="file" id="photo" accept="image/*" onchange="showName('photo')">
             </div>
 
             <button type="submit" id="submitBtn">立即送出報帳</button>
@@ -173,11 +204,29 @@
         today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
         document.getElementById('date').value = today.toISOString().slice(0, 10);
 
-        // 自動計算 5% 稅金並四捨五入
-        function calculateTax() {
+        // 主計算邏輯：處理未稅、稅金、總金額
+        function calculateAll() {
             const amount = parseFloat(document.getElementById('amount').value) || 0;
-            const tax = Math.round(amount * 0.05);
+            const isTaxRequired = document.getElementById('taxToggle').checked;
+            
+            let tax = 0;
+            if (isTaxRequired) {
+                tax = Math.round(amount * 0.05); // 有勾選，算 5%
+            } else {
+                tax = 0; // 沒勾選，強制歸 0
+            }
+            
             document.getElementById('tax').value = tax;
+            
+            // 計算總金額
+            document.getElementById('total').value = amount + tax;
+        }
+
+        // 當使用者手動微調稅金欄位時，只重新計算總金額
+        function calculateTotalOnly() {
+            const amount = parseFloat(document.getElementById('amount').value) || 0;
+            const tax = parseFloat(document.getElementById('tax').value) || 0;
+            document.getElementById('total').value = amount + tax;
         }
 
         function showName(id) {
@@ -195,6 +244,26 @@
 
         document.getElementById('pettyCashForm').onsubmit = async function(e) {
             e.preventDefault();
+            
+            // 擷取目前填寫的資料內容
+            const dateVal = document.getElementById('date').value;
+            const userVal = document.getElementById('user').value;
+            const catVal = document.getElementById('category').value;
+            const totalVal = document.getElementById('total').value;
+
+            // 5. 彈出確認訊息框
+            const confirmMessage = 
+                `請確認報帳資料是否正確：\n\n` +
+                `📅 日期：${dateVal}\n` +
+                `👤 經辦人：${userVal}\n` +
+                `🏷️ 費用項目：${catVal}\n` +
+                `💰 總金額：$${totalVal} 元\n\n` +
+                `確定要送出嗎？`;
+
+            if (!confirm(confirmMessage)) {
+                return; // 如果使用者點選「取消」，則中斷不送出
+            }
+
             const btn = document.getElementById('submitBtn');
             const loader = document.getElementById('loadingOverlay');
             
@@ -203,11 +272,12 @@
 
             try {
                 const formData = {
-                    date: document.getElementById('date').value,
-                    user: document.getElementById('user').value,
-                    category: document.getElementById('category').value,
+                    date: dateVal,
+                    user: userVal,
+                    category: catVal,
                     amount: document.getElementById('amount').value,
-                    tax: document.getElementById('tax').value, // 新增傳送稅金
+                    tax: document.getElementById('tax').value,
+                    total: totalVal, // 新增傳送總金額
                     note: document.getElementById('note').value,
                     receipt: await fileToDataURL(document.getElementById('receipt').files[0]),
                     photo: await fileToDataURL(document.getElementById('photo').files[0])
