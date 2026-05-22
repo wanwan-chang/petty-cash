@@ -7,11 +7,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            /* 調整為咖波藍系 */
-            --primary: #3498db;
-            --primary-dark: #2980b9;
+            /* 精準調配：咖波經典天空藍色系 */
+            --primary: #29b6f6;
+            --primary-dark: #039be5;
             --text: #2c3e50;
-            --capoo-blue-bg: #87ceeb; /* 淺藍底色 */
+            --capoo-light: #e1f5fe;
         }
         
         body { 
@@ -23,33 +23,31 @@
             min-height: 100vh;
             box-sizing: border-box;
             
-            /* 🎨 方案B: 咖波風景背景 - 已填入公開圖床網址 */
-            background-image: url('https://raw.githubusercontent.com/bearwanwan317/capoo_assets/main/capoo_bg.jpg'); 
-            background-size: cover;       /* 鋪滿 */
-            background-position: center;   /* 置中 */
-            background-attachment: fixed;  /* 固定背景不捲動 */
-            background-color: var(--capoo-blue-bg); /* 如果圖片載入失敗時的底色 */
+            /* 🎨 改用不破圖的「咖波經典藍」夢幻漸層底色，保證不管怎麼看都是滿滿的咖波藍 */
+            background: linear-gradient(135deg, #b3e5fc 0%, #81d4fa 50%, #4fc3f7 100%);
+            background-attachment: fixed;
         }
         
-        /* ✨ 毛玻璃質感卡片 */
+        /* ✨ 精緻毛玻璃質感卡片 */
         .app-card {
-            background: rgba(255, 255, 255, 0.9) !important; /* 90% 透明白，讓背景微透 */
-            backdrop-filter: blur(10px); /* 模糊濾鏡，打造霧面玻璃感 */
-            -webkit-backdrop-filter: blur(10px); /* Safari 相容 */
+            background: rgba(255, 255, 255, 0.88) !important; /* 微調透明度，讓背景的咖波藍透進來 */
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px); 
             width: 100%;
             max-width: 450px;
-            border-radius: 28px; /* 更圓潤可愛 */
-            box-shadow: 0 10px 30px rgba(52, 152, 219, 0.15); /* 咖波藍系陰影 */
+            border-radius: 28px; 
+            box-shadow: 0 12px 40px rgba(3, 155, 229, 0.15); /* 咖波藍專屬發光陰影 */
             padding: 28px;
             box-sizing: border-box;
         }
 
         .header { text-align: center; margin-bottom: 30px; }
-        .header i { font-size: 40px; color: var(--primary); margin-bottom: 10px; }
-        .header h1 { margin: 0; font-size: 22px; color: var(--text); }
+        /* 讓大肉墊圖示變成正宗的咖波藍色 */
+        .header i.fa-paw { font-size: 48px; color: #29b6f6; margin-bottom: 12px; display: inline-block; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.05)); }
+        .header h1 { margin: 0; font-size: 24px; color: var(--text); font-weight: bold; letter-spacing: 1px; }
 
         .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; font-weight: 600; margin-bottom: 8px; color: #475569; font-size: 14px; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 8px; color: #455a64; font-size: 14px; }
         .form-group label i { margin-right: 6px; color: var(--primary); }
 
         .tax-label-container {
@@ -61,7 +59,7 @@
             display: flex;
             align-items: center;
             font-size: 13px;
-            color: #64748b;
+            color: #546e7a;
             cursor: pointer;
         }
         .switch-container input {
@@ -72,39 +70,39 @@
         }
 
         input, select, textarea { 
-            width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 12px;
-            font-size: 16px; box-sizing: border-box; transition: all 0.3s; background: rgba(255, 255, 255, 0.7); /* 輸入框也帶一點透明 */
+            width: 100%; padding: 12px 16px; border: 1.5px solid #cfd8dc; border-radius: 14px;
+            font-size: 16px; box-sizing: border-box; transition: all 0.3s; background: rgba(255, 255, 255, 0.75);
+            color: var(--text);
         }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.1); }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(41, 182, 246, 0.15); }
         
         .amount-input { font-size: 22px; font-weight: bold; color: var(--text); text-align: center; }
         .tax-input { font-size: 22px; font-weight: bold; color: #e11d48; text-align: center; }
-        
-        .total-input { font-size: 24px; font-weight: bold; color: #27ae60; text-align: center; background: rgba(255, 255, 255, 0.7); border-color: #e2e8f0; }
+        .total-input { font-size: 24px; font-weight: bold; color: #2e7d32; text-align: center; background: rgba(255, 255, 255, 0.8); border-color: #cbd5e1; }
 
         .file-upload { 
-            border: 2px dashed #cbd5e1; border-radius: 12px; padding: 15px; text-align: center; cursor: pointer;
-            transition: 0.3s; background: rgba(255, 255, 255, 0.7); display: block;
+            border: 2px dashed #b0bec5; border-radius: 14px; padding: 16px; text-align: center; cursor: pointer;
+            transition: 0.3s; background: rgba(255, 255, 255, 0.6); display: block;
         }
-        .file-upload:active { background: #f1f5f9; border-color: var(--primary); }
-        .file-upload i { font-size: 24px; color: #64748b; margin-bottom: 5px; }
-        .file-upload span { display: block; font-size: 13px; color: #64748b; }
+        .file-upload:active { background: #e1f5fe; border-color: var(--primary); }
+        .file-upload i { font-size: 26px; color: #78909c; margin-bottom: 6px; }
+        .file-upload span { display: block; font-size: 13px; color: #607d8b; }
         input[type="file"] { display: none; }
-        .file-name { font-size: 12px; color: var(--primary); margin-top: 5px; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .file-name { font-size: 12px; color: var(--primary-dark); margin-top: 5px; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
         button { 
-            width: 100%; padding: 16px; background: var(--primary); color: white; border: none; 
+            width: 100%; padding: 16px; background: linear-gradient(135deg, #4fc3f7 0%, #29b6f6 100%); color: white; border: none; 
             border-radius: 18px; font-size: 18px; font-weight: bold; cursor: pointer;
-            margin-top: 10px; transition: 0.3s; box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+            margin-top: 12px; transition: 0.3s; box-shadow: 0 4px 14px rgba(41, 182, 246, 0.4);
         }
-        button:active { transform: scale(0.98); background: var(--primary-dark); }
-        button:disabled { background: #94a3b8; box-shadow: none; }
+        button:active { transform: scale(0.97); background: var(--primary-dark); }
+        button:disabled { background: #b0bec5; box-shadow: none; }
 
         #loadingOverlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255,255,255,0.92); z-index: 100; flex-direction: column; align-items: center; justify-content: center;
+            background: rgba(225, 245, 254, 0.95); z-index: 100; flex-direction: column; align-items: center; justify-content: center;
         }
-        .spinner { width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+        .spinner { width: 50px; height: 50px; border: 5px solid #e1f5fe; border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
@@ -112,7 +110,7 @@
 
     <div class="app-card">
         <div class="header">
-            <i class="fas fa-paw"></i> /* 可愛的小爪子 icon */
+            <i class="fas fa-paw"></i>
             <h1>零用金報帳系統ww</h1>
         </div>
 
@@ -211,7 +209,7 @@
 
     <div id="loadingOverlay">
         <div class="spinner"></div>
-        <p style="margin-top: 15px; font-weight: bold; color: var(--primary);">資料處理中，請勿關閉視窗...</p>
+        <p style="margin-top: 15px; font-weight: bold; color: var(--primary-dark);">資料送往雲端中🐾...</p>
     </div>
 
     <script>
@@ -220,33 +218,29 @@
         today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
         document.getElementById('date').value = today.toISOString().slice(0, 10);
 
-        // 處理項目切換，備註提示字切換與數字鍵盤
         function handleCategoryChange() {
             const category = document.getElementById('category').value;
             const noteInput = document.getElementById('note');
             if (category === '午餐') {
                 noteInput.placeholder = "請輸入人數數字 (例如: 10)";
-                noteInput.inputMode = "numeric"; // 在手機彈出數字鍵盤
+                noteInput.inputMode = "numeric";
             } else {
                 noteInput.placeholder = "請輸入用途說明...";
                 noteInput.inputMode = "text";
             }
         }
 
-        // 當游標離開備註輸入框時，如果選午餐且是純數字，自動轉換為 <X人>
         function formatNoteValue() {
             const category = document.getElementById('category').value;
             const noteInput = document.getElementById('note');
             let val = noteInput.value.trim();
             if (category === '午餐' && val !== "") {
-                // 如果使用者輸入純數字，幫他包裝成 <數字人>
                 if (/^\d+$/.test(val)) {
                     noteInput.value = `<${val}人>`;
                 }
             }
         }
 
-        // 初始化檢查一次提示字
         handleCategoryChange();
 
         function calculateAll() {
@@ -270,15 +264,14 @@
             document.getElementById('total').value = amount + tax;
         }
 
+        // 優化：正確處理檔名顯示
         function showName(id) {
             const file = document.getElementById(id).files[0];
             const nameEl = document.getElementById(id + 'Name');
             if (file) {
                 nameEl.innerText = "✅ 已選取：" + file.name;
-                nameEl.style.display = "block"; // 顯示檔名
             } else {
                 nameEl.innerText = "";
-                nameEl.style.display = "none";
             }
         }
 
@@ -292,8 +285,6 @@
 
         document.getElementById('pettyCashForm').onsubmit = async function(e) {
             e.preventDefault();
-            
-            // 送出前再次確保數字有被轉成人字
             formatNoteValue();
             
             const dateVal = document.getElementById('date').value;
@@ -301,7 +292,6 @@
             const catVal = document.getElementById('category').value;
             const totalVal = document.getElementById('total').value;
 
-            // 彈出確認訊息框
             const confirmMessage = 
                 `請確認報帳資料是否正確：\n\n` +
                 `📅 日期：${dateVal}\n` +
@@ -331,7 +321,6 @@
                     photo: await fileToDataURL(document.getElementById('photo').files[0])
                 };
 
-                // ★ 此處已保留您的 GAS 網址 ★
                 const GAS_URL = "https://script.google.com/macros/s/AKfycbyymdPFrHz7MQaeBJ_MdZhwhFSV87Nvw-ORBqAYJlnoxzjGy2NoRnFTRSXu5qoaIRW1vw/exec"; 
 
                 const response = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify(formData) });
