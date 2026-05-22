@@ -23,24 +23,24 @@
             min-height: 100vh;
             box-sizing: border-box;
             
-            /* 🎨 方案B: 咖波風景背景 (採用了Unsplash上無版權質感的藍色系插畫風格圖，模擬咖波藍) */
-            /* 💡 未來如果你有特定的咖波圖床網址，可以替換下方的 url('') */
-            background-image: url('https://images.unsplash.com/photo-1541123437800-1bb1317badc2?q=80&w=600&h=800&auto=format&fit=crop'); 
+            /* 🎨 方案B: 咖波風景背景 - 已填入公開圖床網址 */
+            background-image: url('https://raw.githubusercontent.com/bearwanwan317/capoo_assets/main/capoo_bg.jpg'); 
             background-size: cover;       /* 鋪滿 */
             background-position: center;   /* 置中 */
             background-attachment: fixed;  /* 固定背景不捲動 */
+            background-color: var(--capoo-blue-bg); /* 如果圖片載入失敗時的底色 */
         }
         
-        /* ✨ 升級為毛玻璃質感卡片 */
+        /* ✨ 毛玻璃質感卡片 */
         .app-card {
-            background: rgba(255, 255, 255, 0.92) !important; /* 92% 透明白，讓背景微透 */
+            background: rgba(255, 255, 255, 0.9) !important; /* 90% 透明白，讓背景微透 */
             backdrop-filter: blur(10px); /* 模糊濾鏡，打造霧面玻璃感 */
             -webkit-backdrop-filter: blur(10px); /* Safari 相容 */
             width: 100%;
             max-width: 450px;
             border-radius: 28px; /* 更圓潤可愛 */
-            box-shadow: 0 10px 30px rgba(52, 152, 219, 0.1); /* 咖波藍系陰影 */
-            padding: 28px; /* 增加間距 */
+            box-shadow: 0 10px 30px rgba(52, 152, 219, 0.15); /* 咖波藍系陰影 */
+            padding: 28px;
             box-sizing: border-box;
         }
 
@@ -73,19 +73,18 @@
 
         input, select, textarea { 
             width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 12px;
-            font-size: 16px; box-sizing: border-box; transition: all 0.3s; background: #fff; /* 玻璃卡片上用純白輸入框 */
+            font-size: 16px; box-sizing: border-box; transition: all 0.3s; background: rgba(255, 255, 255, 0.7); /* 輸入框也帶一點透明 */
         }
         input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.1); }
         
         .amount-input { font-size: 22px; font-weight: bold; color: var(--text); text-align: center; }
         .tax-input { font-size: 22px; font-weight: bold; color: #e11d48; text-align: center; }
         
-        /* 總金額欄位採用乾淨的設計 */
-        .total-input { font-size: 24px; font-weight: bold; color: #27ae60; text-align: center; background: #fff; border-color: #e2e8f0; }
+        .total-input { font-size: 24px; font-weight: bold; color: #27ae60; text-align: center; background: rgba(255, 255, 255, 0.7); border-color: #e2e8f0; }
 
         .file-upload { 
             border: 2px dashed #cbd5e1; border-radius: 12px; padding: 15px; text-align: center; cursor: pointer;
-            transition: 0.3s; background: #fff; display: block;
+            transition: 0.3s; background: rgba(255, 255, 255, 0.7); display: block;
         }
         .file-upload:active { background: #f1f5f9; border-color: var(--primary); }
         .file-upload i { font-size: 24px; color: #64748b; margin-bottom: 5px; }
@@ -178,7 +177,7 @@
 
             <div class="form-group">
                 <label id="noteLabel"><i class="fas fa-comment-dots"></i> 備註原因</label>
-                <input type="text" id="note" placeholder="請輸入用途說明..." onblur="formatNoteValue()">
+                <input type="text" id="note" placeholder="請輸入人數數字 (例如: 10)" onblur="formatNoteValue()">
             </div>
 
             <div class="form-group">
@@ -221,29 +220,33 @@
         today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
         document.getElementById('date').value = today.toISOString().slice(0, 10);
 
+        // 處理項目切換，備註提示字切換與數字鍵盤
         function handleCategoryChange() {
             const category = document.getElementById('category').value;
             const noteInput = document.getElementById('note');
             if (category === '午餐') {
                 noteInput.placeholder = "請輸入人數數字 (例如: 10)";
-                noteInput.inputMode = "numeric"; // 彈出數字鍵盤
+                noteInput.inputMode = "numeric"; // 在手機彈出數字鍵盤
             } else {
                 noteInput.placeholder = "請輸入用途說明...";
                 noteInput.inputMode = "text";
             }
         }
 
+        // 當游標離開備註輸入框時，如果選午餐且是純數字，自動轉換為 <X人>
         function formatNoteValue() {
             const category = document.getElementById('category').value;
             const noteInput = document.getElementById('note');
             let val = noteInput.value.trim();
             if (category === '午餐' && val !== "") {
+                // 如果使用者輸入純數字，幫他包裝成 <數字人>
                 if (/^\d+$/.test(val)) {
                     noteInput.value = `<${val}人>`;
                 }
             }
         }
 
+        // 初始化檢查一次提示字
         handleCategoryChange();
 
         function calculateAll() {
@@ -289,6 +292,8 @@
 
         document.getElementById('pettyCashForm').onsubmit = async function(e) {
             e.preventDefault();
+            
+            // 送出前再次確保數字有被轉成人字
             formatNoteValue();
             
             const dateVal = document.getElementById('date').value;
@@ -296,13 +301,14 @@
             const catVal = document.getElementById('category').value;
             const totalVal = document.getElementById('total').value;
 
+            // 彈出確認訊息框
             const confirmMessage = 
-                `📝 報帳資料確認：\n\n` +
+                `請確認報帳資料是否正確：\n\n` +
                 `📅 日期：${dateVal}\n` +
                 `👤 經辦人：${userVal}\n` +
                 `🏷️ 項目：${catVal}\n` +
                 `💰 總金額：$${totalVal} 元\n\n` +
-                `（咖波說：資料都對嗎？🐾）`;
+                `確定要送出嗎？`;
 
             if (!confirm(confirmMessage)) return;
 
@@ -325,6 +331,7 @@
                     photo: await fileToDataURL(document.getElementById('photo').files[0])
                 };
 
+                // ★ 此處已保留您的 GAS 網址 ★
                 const GAS_URL = "https://script.google.com/macros/s/AKfycbyymdPFrHz7MQaeBJ_MdZhwhFSV87Nvw-ORBqAYJlnoxzjGy2NoRnFTRSXu5qoaIRW1vw/exec"; 
 
                 const response = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify(formData) });
