@@ -38,7 +38,6 @@
         .form-group label { display: block; font-weight: 600; margin-bottom: 8px; color: #475569; font-size: 14px; }
         .form-group label i { margin-right: 6px; color: var(--primary); }
 
-        /* 稅金開關置右樣式 */
         .tax-label-container {
             display: flex;
             justify-content: space-between;
@@ -111,8 +110,7 @@
             <div class="form-group">
                 <label><i class="fas fa-user-edit"></i> 經辦人</label>
                 <select id="user" required>
-                    <option value="">請選擇人員...</option>
-                    <option value="張琬淑">張琬淑</option>
+                    <option value="張琬淑" selected>張琬淑</option>
                     <option value="潘予璇">潘予璇</option>
                     <option value="梁佳琦">梁佳琦</option>
                     <option value="吳睿憲">吳睿憲</option>
@@ -130,17 +128,15 @@
             </div>
 
             <div class="form-group">
-                <label><i class="fas fa-tag"></i> 費用項目</label>
+                <label><i class="fas fa-tag"></i> 項目</label>
                 <select id="category">
-                    <option value="餐費-午餐">① 餐費-午餐</option>
-                    <option value="餐費-值班">① 餐費-值班</option>
-                    <option value="餐費-加班">① 餐費-加班</option>
-                    <option value="快遞費">② 快遞費</option>
-                    <option value="郵局掛號費">② 郵局掛號費</option>
-                    <option value="文具用品">③ 文具用品</option>
-                    <option value="拜拜供品">④ 拜拜供品</option>
-                    <option value="義交費用">⑤ 義交費用</option>
-                    <option value="其他">⑥ 其他</option>
+                    <option value="午餐" selected>① 午餐</option>
+                    <option value="值班餐費">② 值班餐費</option>
+                    <option value="加班餐費">③ 加班餐費</option>
+                    <option value="文具用品">④ 文具用品</option>
+                    <option value="運費">⑤ 運費</option>
+                    <option value="雜費">⑥ 雜費</option>
+                    <option value="其他">⑦ 其他</option>
                 </select>
             </div>
 
@@ -204,25 +200,21 @@
         today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
         document.getElementById('date').value = today.toISOString().slice(0, 10);
 
-        // 主計算邏輯：處理未稅、稅金、總金額
         function calculateAll() {
             const amount = parseFloat(document.getElementById('amount').value) || 0;
             const isTaxRequired = document.getElementById('taxToggle').checked;
             
             let tax = 0;
             if (isTaxRequired) {
-                tax = Math.round(amount * 0.05); // 有勾選，算 5%
+                tax = Math.round(amount * 0.05);
             } else {
-                tax = 0; // 沒勾選，強制歸 0
+                tax = 0;
             }
             
             document.getElementById('tax').value = tax;
-            
-            // 計算總金額
             document.getElementById('total').value = amount + tax;
         }
 
-        // 當使用者手動微調稅金欄位時，只重新計算總金額
         function calculateTotalOnly() {
             const amount = parseFloat(document.getElementById('amount').value) || 0;
             const tax = parseFloat(document.getElementById('tax').value) || 0;
@@ -245,23 +237,21 @@
         document.getElementById('pettyCashForm').onsubmit = async function(e) {
             e.preventDefault();
             
-            // 擷取目前填寫的資料內容
             const dateVal = document.getElementById('date').value;
             const userVal = document.getElementById('user').value;
             const catVal = document.getElementById('category').value;
             const totalVal = document.getElementById('total').value;
 
-            // 5. 彈出確認訊息框
             const confirmMessage = 
                 `請確認報帳資料是否正確：\n\n` +
                 `📅 日期：${dateVal}\n` +
                 `👤 經辦人：${userVal}\n` +
-                `🏷️ 費用項目：${catVal}\n` +
+                `🏷️ 項目：${catVal}\n` +
                 `💰 總金額：$${totalVal} 元\n\n` +
                 `確定要送出嗎？`;
 
             if (!confirm(confirmMessage)) {
-                return; // 如果使用者點選「取消」，則中斷不送出
+                return;
             }
 
             const btn = document.getElementById('submitBtn');
@@ -277,13 +267,12 @@
                     category: catVal,
                     amount: document.getElementById('amount').value,
                     tax: document.getElementById('tax').value,
-                    total: totalVal, // 新增傳送總金額
+                    total: totalVal,
                     note: document.getElementById('note').value,
                     receipt: await fileToDataURL(document.getElementById('receipt').files[0]),
                     photo: await fileToDataURL(document.getElementById('photo').files[0])
                 };
 
-                // 你的 GAS 網址已保留
                 const GAS_URL = "https://script.google.com/macros/s/AKfycbyymdPFrHz7MQaeBJ_MdZhwhFSV87Nvw-ORBqAYJlnoxzjGy2NoRnFTRSXu5qoaIRW1vw/exec"; 
 
                 const response = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify(formData) });
