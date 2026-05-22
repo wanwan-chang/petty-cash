@@ -129,7 +129,7 @@
 
             <div class="form-group">
                 <label><i class="fas fa-tag"></i> 項目</label>
-                <select id="category">
+                <select id="category" onchange="handleCategoryChange()">
                     <option value="午餐" selected>① 午餐</option>
                     <option value="值班餐費">② 值班餐費</option>
                     <option value="加班餐費">③ 加班餐費</option>
@@ -161,8 +161,13 @@
             </div>
 
             <div class="form-group">
-                <label><i class="fas fa-comment-dots"></i> 備註原因</label>
-                <textarea id="note" rows="2" placeholder="請輸入用途說明..."></textarea>
+                <label id="noteLabel"><i class="fas fa-comment-dots"></i> 備註原因</label>
+                <input type="text" id="note" placeholder="請輸入人數數字 (例如: 10)" inputmode="numeric" onblur="formatNoteValue()">
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-receipt"></i> 發票號碼 / 收據編號</label>
+                <input type="text" id="invoiceNumber" placeholder="請輸入發票號碼 (選填)">
             </div>
 
             <div class="form-group">
@@ -199,6 +204,37 @@
         const today = new Date();
         today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
         document.getElementById('date').value = today.toISOString().slice(0, 10);
+
+        // 2. 處理項目切換時，備註原因輸入框的提示文字切換
+        function handleCategoryChange() {
+            const category = document.getElementById('category').value;
+            const noteInput = document.getElementById('note');
+            
+            if (category === '午餐') {
+                noteInput.placeholder = "請輸入人數數字 (例如: 10)";
+                noteInput.type = "text"; // 為了能顯示 <10人>
+            } else {
+                noteInput.placeholder = "請輸入用途說明...";
+                noteInput.type = "text";
+            }
+        }
+
+        // 2. 當游標離開備註輸入框時，如果選午餐且是純數字，自動轉換為 <X人>
+        function formatNoteValue() {
+            const category = document.getElementById('category').value;
+            const noteInput = document.getElementById('note');
+            let val = noteInput.value.trim();
+            
+            if (category === '午餐' && val !== "") {
+                // 如果使用者輸入純數字，幫他包裝成 <數字人>
+                if (/^\d+$/.test(val)) {
+                    noteInput.value = `<${val}人>`;
+                }
+            }
+        }
+
+        // 初始化檢查一次提示字
+        handleCategoryChange();
 
         function calculateAll() {
             const amount = parseFloat(document.getElementById('amount').value) || 0;
@@ -237,6 +273,9 @@
         document.getElementById('pettyCashForm').onsubmit = async function(e) {
             e.preventDefault();
             
+            // 送出前再次確保數字有被轉成人字
+            formatNoteValue();
+            
             const dateVal = document.getElementById('date').value;
             const userVal = document.getElementById('user').value;
             const catVal = document.getElementById('category').value;
@@ -269,6 +308,7 @@
                     tax: document.getElementById('tax').value,
                     total: totalVal,
                     note: document.getElementById('note').value,
+                    invoiceNumber: document.getElementById('invoiceNumber').value, // 新增傳送發票號碼
                     receipt: await fileToDataURL(document.getElementById('receipt').files[0]),
                     photo: await fileToDataURL(document.getElementById('photo').files[0])
                 };
