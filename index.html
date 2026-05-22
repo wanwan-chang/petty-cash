@@ -3,38 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>零用金報帳系統ww</title>
+    <title>零用金報帳系統ww - Capoo主題</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1e40af;
-            --bg: #f1f5f9;
-            --card: #ffffff;
-            --text: #1e293b;
+            /* 調整為咖波藍系 */
+            --primary: #3498db;
+            --primary-dark: #2980b9;
+            --text: #2c3e50;
+            --capoo-blue-bg: #87ceeb; /* 淺藍底色 */
         }
+        
         body { 
             font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif; 
-            background: var(--bg);
             margin: 0;
             display: flex;
             justify-content: center;
             padding: 20px;
+            min-height: 100vh;
+            box-sizing: border-box;
+            
+            /* 🎨 方案B: 咖波風景背景 (採用了Unsplash上無版權質感的藍色系插畫風格圖，模擬咖波藍) */
+            /* 💡 未來如果你有特定的咖波圖床網址，可以替換下方的 url('') */
+            background-image: url('https://images.unsplash.com/photo-1541123437800-1bb1317badc2?q=80&w=600&h=800&auto=format&fit=crop'); 
+            background-size: cover;       /* 鋪滿 */
+            background-position: center;   /* 置中 */
+            background-attachment: fixed;  /* 固定背景不捲動 */
         }
+        
+        /* ✨ 升級為毛玻璃質感卡片 */
         .app-card {
-            background: var(--card);
+            background: rgba(255, 255, 255, 0.92) !important; /* 92% 透明白，讓背景微透 */
+            backdrop-filter: blur(10px); /* 模糊濾鏡，打造霧面玻璃感 */
+            -webkit-backdrop-filter: blur(10px); /* Safari 相容 */
             width: 100%;
             max-width: 450px;
-            border-radius: 24px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            padding: 24px;
+            border-radius: 28px; /* 更圓潤可愛 */
+            box-shadow: 0 10px 30px rgba(52, 152, 219, 0.1); /* 咖波藍系陰影 */
+            padding: 28px; /* 增加間距 */
             box-sizing: border-box;
         }
+
         .header { text-align: center; margin-bottom: 30px; }
         .header i { font-size: 40px; color: var(--primary); margin-bottom: 10px; }
         .header h1 { margin: 0; font-size: 22px; color: var(--text); }
 
-        .form-group { margin-bottom: 18px; }
+        .form-group { margin-bottom: 20px; }
         .form-group label { display: block; font-weight: 600; margin-bottom: 8px; color: #475569; font-size: 14px; }
         .form-group label i { margin-right: 6px; color: var(--primary); }
 
@@ -59,17 +73,19 @@
 
         input, select, textarea { 
             width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 12px;
-            font-size: 16px; box-sizing: border-box; transition: all 0.3s; background: #f8fafc;
+            font-size: 16px; box-sizing: border-box; transition: all 0.3s; background: #fff; /* 玻璃卡片上用純白輸入框 */
         }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.1); }
         
         .amount-input { font-size: 22px; font-weight: bold; color: var(--text); text-align: center; }
         .tax-input { font-size: 22px; font-weight: bold; color: #e11d48; text-align: center; }
-        .total-input { font-size: 24px; font-weight: bold; color: #16a34a; text-align: center; background: #f0fdf4; border-color: #bbf7d0; }
+        
+        /* 總金額欄位採用乾淨的設計 */
+        .total-input { font-size: 24px; font-weight: bold; color: #27ae60; text-align: center; background: #fff; border-color: #e2e8f0; }
 
         .file-upload { 
             border: 2px dashed #cbd5e1; border-radius: 12px; padding: 15px; text-align: center; cursor: pointer;
-            transition: 0.3s; background: #f8fafc; display: block;
+            transition: 0.3s; background: #fff; display: block;
         }
         .file-upload:active { background: #f1f5f9; border-color: var(--primary); }
         .file-upload i { font-size: 24px; color: #64748b; margin-bottom: 5px; }
@@ -79,15 +95,15 @@
 
         button { 
             width: 100%; padding: 16px; background: var(--primary); color: white; border: none; 
-            border-radius: 16px; font-size: 18px; font-weight: bold; cursor: pointer;
-            margin-top: 10px; transition: 0.3s; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            border-radius: 18px; font-size: 18px; font-weight: bold; cursor: pointer;
+            margin-top: 10px; transition: 0.3s; box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
         }
         button:active { transform: scale(0.98); background: var(--primary-dark); }
         button:disabled { background: #94a3b8; box-shadow: none; }
 
         #loadingOverlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255,255,255,0.9); z-index: 100; flex-direction: column; align-items: center; justify-content: center;
+            background: rgba(255,255,255,0.92); z-index: 100; flex-direction: column; align-items: center; justify-content: center;
         }
         .spinner { width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -97,7 +113,7 @@
 
     <div class="app-card">
         <div class="header">
-            <i class="fas fa-calculator"></i>
+            <i class="fas fa-paw"></i> /* 可愛的小爪子 icon */
             <h1>零用金報帳系統ww</h1>
         </div>
 
@@ -162,7 +178,7 @@
 
             <div class="form-group">
                 <label id="noteLabel"><i class="fas fa-comment-dots"></i> 備註原因</label>
-                <input type="text" id="note" placeholder="請輸入人數數字 (例如: 10)" inputmode="numeric" onblur="formatNoteValue()">
+                <input type="text" id="note" placeholder="請輸入用途說明..." onblur="formatNoteValue()">
             </div>
 
             <div class="form-group">
@@ -205,35 +221,29 @@
         today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
         document.getElementById('date').value = today.toISOString().slice(0, 10);
 
-        // 2. 處理項目切換時，備註原因輸入框的提示文字切換
         function handleCategoryChange() {
             const category = document.getElementById('category').value;
             const noteInput = document.getElementById('note');
-            
             if (category === '午餐') {
                 noteInput.placeholder = "請輸入人數數字 (例如: 10)";
-                noteInput.type = "text"; // 為了能顯示 <10人>
+                noteInput.inputMode = "numeric"; // 彈出數字鍵盤
             } else {
                 noteInput.placeholder = "請輸入用途說明...";
-                noteInput.type = "text";
+                noteInput.inputMode = "text";
             }
         }
 
-        // 2. 當游標離開備註輸入框時，如果選午餐且是純數字，自動轉換為 <X人>
         function formatNoteValue() {
             const category = document.getElementById('category').value;
             const noteInput = document.getElementById('note');
             let val = noteInput.value.trim();
-            
             if (category === '午餐' && val !== "") {
-                // 如果使用者輸入純數字，幫他包裝成 <數字人>
                 if (/^\d+$/.test(val)) {
                     noteInput.value = `<${val}人>`;
                 }
             }
         }
 
-        // 初始化檢查一次提示字
         handleCategoryChange();
 
         function calculateAll() {
@@ -259,7 +269,14 @@
 
         function showName(id) {
             const file = document.getElementById(id).files[0];
-            document.getElementById(id + 'Name').innerText = file ? "✅ 已選取：" + file.name : "";
+            const nameEl = document.getElementById(id + 'Name');
+            if (file) {
+                nameEl.innerText = "✅ 已選取：" + file.name;
+                nameEl.style.display = "block"; // 顯示檔名
+            } else {
+                nameEl.innerText = "";
+                nameEl.style.display = "none";
+            }
         }
 
         const fileToDataURL = file => new Promise((resolve, reject) => {
@@ -272,8 +289,6 @@
 
         document.getElementById('pettyCashForm').onsubmit = async function(e) {
             e.preventDefault();
-            
-            // 送出前再次確保數字有被轉成人字
             formatNoteValue();
             
             const dateVal = document.getElementById('date').value;
@@ -282,20 +297,17 @@
             const totalVal = document.getElementById('total').value;
 
             const confirmMessage = 
-                `請確認報帳資料是否正確：\n\n` +
+                `📝 報帳資料確認：\n\n` +
                 `📅 日期：${dateVal}\n` +
                 `👤 經辦人：${userVal}\n` +
                 `🏷️ 項目：${catVal}\n` +
                 `💰 總金額：$${totalVal} 元\n\n` +
-                `確定要送出嗎？`;
+                `（咖波說：資料都對嗎？🐾）`;
 
-            if (!confirm(confirmMessage)) {
-                return;
-            }
+            if (!confirm(confirmMessage)) return;
 
             const btn = document.getElementById('submitBtn');
             const loader = document.getElementById('loadingOverlay');
-            
             btn.disabled = true;
             loader.style.display = 'flex';
 
@@ -308,7 +320,7 @@
                     tax: document.getElementById('tax').value,
                     total: totalVal,
                     note: document.getElementById('note').value,
-                    invoiceNumber: document.getElementById('invoiceNumber').value, // 新增傳送發票號碼
+                    invoiceNumber: document.getElementById('invoiceNumber').value,
                     receipt: await fileToDataURL(document.getElementById('receipt').files[0]),
                     photo: await fileToDataURL(document.getElementById('photo').files[0])
                 };
@@ -319,7 +331,7 @@
                 const result = await response.json();
 
                 if (result.status === 'success') {
-                    alert('🎉 報帳成功！資料已儲存。');
+                    alert('🎉 報帳成功！資料已儲存到雲端了🐾');
                     location.reload(); 
                 } else {
                     alert('❌ 失敗：' + result.message);
