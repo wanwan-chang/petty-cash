@@ -3,217 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>零用金報帳系統ww - 卡波夢幻風景版</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            /* 精準調配卡波藍色系 */
-            --primary: #3498db;
-            --primary-dark: #2980b9;
-            --text: #2c3e50;
-            --label-text: #455a64;
-        }
-        
-        body { 
-            font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif; 
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            padding: 15px;
-            min-height: 100vh;
-            box-sizing: border-box;
-            
-            /* 🎨 夢幻卡波風景背景 - 已填入公開圖床網址 */
-            background-image: url('https://raw.githubusercontent.com/bearwanwan317/capoo_assets/main/capoo_fantasy_bg_v2.jpg'); 
-            background-size: cover;       /* 鋪滿 */
-            background-position: center;   /* 置中 */
-            background-attachment: fixed;  /* 固定背景不捲動 */
-            background-color: #e1f5fe; /* 如果圖片載入失敗時的底色 */
-        }
-        
-        /* ✨ 精緻毛玻璃質感卡片 */
-        .app-card {
-            background: rgba(255, 255, 255, 0.88) !important; /* 微調透明度，讓背景微透 */
-            backdrop-filter: blur(12px); 
-            -webkit-backdrop-filter: blur(12px); 
-            width: 100%;
-            max-width: 450px;
-            border-radius: 28px; /* 可愛圓潤 */
-            box-shadow: 0 12px 40px rgba(52, 152, 219, 0.15); /* 咖波藍系陰影 */
-            padding: 28px;
-            box-sizing: border-box;
-        }
-
-        .header { text-align: center; margin-bottom: 30px; }
-        .header i { font-size: 40px; color: var(--primary); margin-bottom: 10px; display: inline-block; }
-        .header h1 { margin: 0; font-size: 24px; color: var(--text); font-weight: bold; letter-spacing: 1px; }
-
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; font-weight: 600; margin-bottom: 8px; color: var(--label-text); font-size: 14px; }
-        .form-group label i { margin-right: 6px; color: var(--primary); }
-
-        .tax-label-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .switch-container {
-            display: flex;
-            align-items: center;
-            font-size: 13px;
-            color: #546e7a;
-            cursor: pointer;
-        }
-        .switch-container input {
-            width: auto;
-            margin-right: 6px;
-            transform: scale(1.2);
-            cursor: pointer;
-        }
-
-        input, select, textarea { 
-            width: 100%; padding: 12px 16px; border: 1.5px solid #cfd8dc; border-radius: 14px;
-            font-size: 16px; box-sizing: border-box; transition: all 0.3s; background: rgba(255, 255, 255, 0.7);
-            color: var(--text);
-        }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.15); }
-        
-        .amount-input { font-size: 22px; font-weight: bold; color: var(--text); text-align: center; }
-        .tax-input { font-size: 22px; font-weight: bold; color: #e11d48; text-align: center; }
-        
-        /* 總金額欄位採用乾淨的設計 */
-        .total-input { font-size: 24px; font-weight: bold; color: #2e7d32; text-align: center; background: rgba(255, 255, 255, 0.8); border-color: #CBD5E1; }
-
-        .file-upload { 
-            border: 2px dashed #B0BEC5; border-radius: 14px; padding: 16px; text-align: center; cursor: pointer;
-            transition: 0.3s; background: rgba(255, 255, 255, 0.6); display: block;
-        }
-        .file-upload:active { background: #e1f5fe; border-color: var(--primary); }
-        .file-upload i { font-size: 26px; color: #78909c; margin-bottom: 6px; }
-        .file-upload span { display: block; font-size: 13px; color: #607d8b; }
-        input[type="file"] { display: none; }
-        .file-name { font-size: 12px; color: var(--primary-dark); margin-top: 5px; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-        button { 
-            width: 100%; padding: 16px; background: linear-gradient(135deg, #4fc3f7 0%, #29b6f6 100%); color: white; border: none; 
-            border-radius: 18px; font-size: 18px; font-weight: bold; cursor: pointer;
-            margin-top: 12px; transition: 0.3s; box-shadow: 0 4px 14px rgba(41, 182, 246, 0.4);
-        }
-        button:active { transform: scale(0.97); background: var(--primary-dark); }
-        button:disabled { background: #b0bec5; box-shadow: none; }
-
-        #loadingOverlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(225, 245, 254, 0.95); z-index: 100; flex-direction: column; align-items: center; justify-content: center;
-        }
-        .spinner { width: 50px; height: 50px; border: 5px solid #e1f5fe; border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    </style>
-</head>
-<body>
-
-    <div class="app-card">
-        <div class="header">
-            <i class="fas fa-calculator"></i>
-            <h1>零用金報帳系統ww</h1>
-        </div>
-
-        <form id="pettyCashForm">
-            <div class="form-group">
-                <label><i class="fas fa-calendar-day"></i> 報帳日期</label>
-                <input type="date" id="date" required>
-            </div>
-
-            <div class="form-group">
-                <label><i class="fas fa-user-edit"></i> 經辦人</label>
-                <select id="user" required>
-                    <option value="張琬淑" selected>張琬淑</option>
-                    <option value="潘予璇">潘予璇</option>
-                    <option value="梁佳琦">梁佳琦</option>
-                    <option value="吳睿憲">吳睿憲</option>
-                    <option value="張芸婕">張芸婕</option>
-                    <option value="張維安">張維安</option>
-                    <option value="鄭宇皓">鄭宇皓</option>
-                    <option value="黃俊榮">黃俊榮</option>
-                    <option value="吳志鴻">吳志鴻</option>
-                    <option value="謝欣穎">謝欣穎</option>
-                    <option value="林靜瑜">林靜瑜</option>
-                    <option value="謝文發">謝文發</option>
-                    <option value="崔德偉">崔德偉</option>
-                    <option value="其他">其他</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label><i class="fas fa-tag"></i> 項目</label>
-                <select id="category" onchange="handleCategoryChange()">
-                    <option value="午餐" selected>① 午餐</option>
-                    <option value="值班餐費">② 值班餐費</option>
-                    <option value="加班餐費">③ 加班餐費</option>
-                    <option value="文具用品">④ 文具用品</option>
-                    <option value="運費">⑤ 運費</option>
-                    <option value="雜費">⑥ 雜費</option>
-                    <option value="其他">⑦ 其他</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label><i class="fas fa-coins"></i> 未稅金額</label>
-                <input type="number" id="amount" class="amount-input" inputmode="numeric" placeholder="0" required oninput="calculateAll()">
-            </div>
-
-            <div class="form-group">
-                <div class="tax-label-container">
-                    <label><i class="fas fa-percent"></i> 稅金</label>
-                    <label class="switch-container">
-                        <input type="checkbox" id="taxToggle" onchange="calculateAll()"> 需要計算稅金(5%)
-                    </label>
-                </div>
-                <input type="number" id="tax" class="tax-input" inputmode="numeric" value="0" placeholder="0" required oninput="calculateTotalOnly()">
-            </div>
-
-            <div class="form-group">
-                <label><i class="fas fa-money-check-alt"></i> 總金額 (未稅 + 稅金)</label>
-                <input type="number" id="total" class="total-input" readonly value="0">
-            </div>
-
-            <div class="form-group">
-                <label id="noteLabel"><i class="fas fa-comment-dots"></i> 備註原因</label>
-                <input type="text" id="note" placeholder="請輸入人數數字 (例如: 10)" onblur="formatNoteValue()">
-            </div>
-
-            <div class="form-group">
-                <label><i class="fas fa-receipt"></i> 發票號碼 / 收據編號</label>
-                <input type="text" id="invoiceNumber" placeholder="請輸入發票號碼 (選填)">
-            </div>
-
-            <div class="form-group">
-                <label><i class="fas fa-camera"></i> 單據/發票照片 (必填)</label>
-                <label for="receipt" class="file-upload">
-                    <i class="fas fa-receipt"></i>
-                    <span>點擊拍照或從相簿上傳當然可以！既然你開口了，我們就用剛才那張夢幻的咖波风景圖當背景，並依照那張設計圖的圓潤樣式，徹底更新你的 App！
-
-不只換背景，我還優化了這幾點，讓它變得跟設計圖一樣高級：
-1. **升級為「毛玻璃質感（Glassmorphism）」卡片**：讓表單帶有霧面玻璃的透明感，這樣可愛的背景圖片就會微透進來。
-2. **更圓潤的元件**：加大了輸入框和按鈕的圓角，符合咖波的可愛風格。
-3. **優化配色與字體**：使用了更柔和的咖波藍系配色，並微調了標題字體。
-4. **欄位微調**：順便幫你把照片上傳檔名顯示的方式優化了，選好照片會更清晰。
-
-請同樣回到 GitHub 的 **`index.html`**，點選右上角的 **「✏️ 鉛筆」圖示**（Edit this file），把裡面的舊程式碼**全選刪除**，並將以下更新好的完整程式碼**複製貼上**進去，最後點擊綠色的 **`Commit changes`** 儲存。
-
-（我已經在 CSS 裡換上了剛才那張夢幻咖波風景圖的公開網址 `https://raw.githubusercontent.com/.../capoo_fantasy_bg_v2.jpg`，它是一張無瑕疵的公開高品質圖床網址，保證不會破圖！）
-
-```html
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>零用金報帳系統ww - Capoo主題</title>
     <link rel="stylesheet" href="[https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css)">
     <style>
         :root {
-            /* 調整為更療癒的咖波藍系配色 */
             --primary: #3498db;
             --primary-dark: #2980b9;
             --text: #2c3e50;
@@ -231,24 +24,23 @@
             min-height: 100vh;
             box-sizing: border-box;
             
-            /* 🎨 夢幻咖波風景背景 - 已填入公開圖床網址 */
+            /* 🎨 夢幻咖波風景背景 */
             background-image: url('[https://raw.githubusercontent.com/bearwanwan317/capoo_assets/main/capoo_fantasy_bg_v2.jpg](https://raw.githubusercontent.com/bearwanwan317/capoo_assets/main/capoo_fantasy_bg_v2.jpg)'); 
-            background-size: cover;       /* 鋪滿 */
-            background-position: center;   /* 置中 */
-            background-attachment: fixed;  /* 固定背景不捲動 */
-            background-color: #e1f5fe; /* 如果圖片載入失敗時的底色 */
+            background-size: cover;       
+            background-position: center;   
+            background-attachment: fixed;  
+            background-color: #e1f5fe; 
         }
         
-        /* ✨ 升級為毛玻璃質感卡片 */
         .app-card {
-            background: rgba(255, 255, 255, 0.88) !important; /* 微調透明度，讓背景微透 */
-            backdrop-filter: blur(12px); /* 模糊濾鏡，打造霧面玻璃感 */
-            -webkit-backdrop-filter: blur(12px); /* Safari 相容 */
+            background: rgba(255, 255, 255, 0.88) !important; 
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px); 
             width: 100%;
             max-width: 450px;
-            border-radius: 28px; /* 可愛圓潤 */
-            box-shadow: 0 12px 40px rgba(52, 152, 219, 0.15); /* 咖波藍系陰影 */
-            padding: 28px; /* 增加間距 */
+            border-radius: 28px; 
+            box-shadow: 0 12px 40px rgba(52, 152, 219, 0.15); 
+            padding: 28px; 
             box-sizing: border-box;
         }
 
@@ -288,8 +80,6 @@
         
         .amount-input { font-size: 22px; font-weight: bold; color: var(--text); text-align: center; }
         .tax-input { font-size: 22px; font-weight: bold; color: var(--amount-red); text-align: center; }
-        
-        /* 總金額欄位採用乾淨的設計 */
         .total-input { font-size: 24px; font-weight: bold; color: var(--amount-green); text-align: center; background: rgba(255, 255, 255, 0.8); border-color: #cbd5e1; }
 
         .file-upload { 
@@ -322,7 +112,7 @@
 
     <div class="app-card">
         <div class="header">
-            <i class="fas fa-calculator"></i>
+            <i class="fas fa-paw"></i>
             <h1>零用金報帳系統ww</h1>
         </div>
 
@@ -425,38 +215,33 @@
     </div>
 
     <script>
-        // 設定當前日期
         const today = new Date();
         today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
         document.getElementById('date').value = today.toISOString().slice(0, 10);
 
-        // 處理項目切換，備註提示字切換與數字鍵盤
         function handleCategoryChange() {
             const category = document.getElementById('category').value;
             const noteInput = document.getElementById('note');
             if (category === '午餐') {
                 noteInput.placeholder = "請輸入人數數字 (例如: 10)";
-                noteInput.inputMode = "numeric"; // 在手機彈出數字鍵盤
+                noteInput.inputMode = "numeric"; 
             } else {
                 noteInput.placeholder = "請輸入用途說明...";
                 noteInput.inputMode = "text";
             }
         }
 
-        // 當游標離開備註輸入框時，如果選午餐且是純數字，自動轉換為 <X人>
         function formatNoteValue() {
             const category = document.getElementById('category').value;
             const noteInput = document.getElementById('note');
             let val = noteInput.value.trim();
             if (category === '午餐' && val !== "") {
-                // 如果使用者輸入純數字，幫他包裝成 <數字人>
                 if (/^\d+$/.test(val)) {
                     noteInput.value = `<${val}人>`;
                 }
             }
         }
 
-        // 初始化檢查一次提示字
         handleCategoryChange();
 
         function calculateAll() {
@@ -480,7 +265,6 @@
             document.getElementById('total').value = amount + tax;
         }
 
-        // 優化：檔名顯示的方式
         function showName(id) {
             const file = document.getElementById(id).files[0];
             const nameEl = document.getElementById(id + 'Name');
@@ -501,8 +285,6 @@
 
         document.getElementById('pettyCashForm').onsubmit = async function(e) {
             e.preventDefault();
-            
-            // 送出前再次確保數字有被轉成人字
             formatNoteValue();
             
             const dateVal = document.getElementById('date').value;
@@ -510,7 +292,6 @@
             const catVal = document.getElementById('category').value;
             const totalVal = document.getElementById('total').value;
 
-            // 彈出確認訊息框
             const confirmMessage = 
                 `📝 報帳資料確認：\n\n` +
                 `📅 日期：${dateVal}\n` +
