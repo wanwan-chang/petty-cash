@@ -22,8 +22,8 @@
             min-height: 100vh;
             box-sizing: border-box;
             
-            /* 🎨 咖波粉藍 ＋ 淡紫色系渲染背景 (絕不閃爍、極致耐看) */
-            background: linear-gradient(135deg, #b3e5fc 0%, #e1f5fe 40%, #f3e5f5 70%, #e8eaf6 100%);
+            /* 🎨 咖波粉藍 ＋ 靛紫色系渲染漸層 (冷色調高級質感) */
+            background: linear-gradient(135deg, #b3e5fc 0%, #81d4fa 35%, #7986cb 70%, #3f51b5 100%);
             background-attachment: fixed;  
         }
         
@@ -34,7 +34,7 @@
             width: 100%;
             max-width: 450px;
             border-radius: 28px; 
-            box-shadow: 0 12px 35px rgba(179, 229, 252, 0.2); 
+            box-shadow: 0 12px 35px rgba(63, 81, 181, 0.15); 
             padding: 28px;
             box-sizing: border-box;
         }
@@ -282,6 +282,7 @@
             const btn = document.getElementById('submitBtn');
             const loader = document.getElementById('loadingOverlay');
             btn.disabled = true;
+            loader.style.with = 'flex';
             loader.style.display = 'flex';
 
             try {
@@ -303,18 +304,4 @@
                 const result = await response.json();
 
                 if (result.status === 'success') {
-                    alert('🎉 報帳成功！資料已儲存。');
-                    location.reload(); 
-                } else {
-                    alert('❌ 失敗：' + result.message);
-                }
-            } catch (error) {
-                alert('⚠️ 系統錯誤：' + error.message);
-            } finally {
-                btn.disabled = false;
-                loader.style.display = 'none';
-            }
-        };
-    </script>
-</body>
-</html>
+                    alert
