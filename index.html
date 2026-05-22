@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>零用金報帳系統ww - Capoo主題</title>
+    <title>零用金報帳系統ww - 卡波完全體</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -22,28 +22,67 @@
             min-height: 100vh;
             box-sizing: border-box;
             
-            /* 🎨 可愛咖波大頭滿版背景 */
-            background-image: url('https://i.imgur.com/K3t5sHe.png'); 
-            background-size: cover;       
-            background-position: center;   
+            /* 🎨 採用最穩定的夢幻雙色漸層，徹底解決重新整理時閃爍黑影的問題 */
+            background: linear-gradient(180deg, #b3e5fc 0%, #e1f5fe 100%);
             background-attachment: fixed;  
-            background-color: #b3e5fc; 
         }
         
         .app-card {
-            background: rgba(255, 255, 255, 0.9) !important; 
-            backdrop-filter: blur(10px); 
-            -webkit-backdrop-filter: blur(10px); 
+            background: rgba(255, 255, 255, 0.92) !important; 
+            backdrop-filter: blur(8px); 
+            -webkit-backdrop-filter: blur(8px); 
             width: 100%;
             max-width: 450px;
             border-radius: 28px; 
-            box-shadow: 0 12px 40px rgba(3, 155, 229, 0.15); 
+            box-shadow: 0 12px 35px rgba(3, 155, 229, 0.12); 
             padding: 28px;
             box-sizing: border-box;
+            margin-top: 10px;
         }
 
-        .header { text-align: center; margin-bottom: 25px; }
-        .header i { font-size: 44px; color: var(--primary); margin-bottom: 8px; display: inline-block; }
+        .header { text-align: center; margin-bottom: 25px; position: relative; }
+        
+        /* 🐱 卡波主題專屬大頭樣式 */
+        .capoo-avatar {
+            width: 85px;
+            height: 85px;
+            background-color: #29b6f6;
+            border-radius: 50%;
+            margin: 0 auto 12px auto;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(3, 155, 229, 0.2);
+            border: 3px solid #fff;
+        }
+        /* 可愛貓耳 */
+        .capoo-avatar::before, .capoo-avatar::after {
+            content: '';
+            position: absolute;
+            top: -4px;
+            width: 24px;
+            height: 24px;
+            background-color: #29b6f6;
+            border-radius: 6px;
+        }
+        .capoo-avatar::before { left: 4px; transform: rotate(-15deg); }
+        .capoo-avatar::after { right: 4px; transform: rotate(15deg); }
+        /* 療癒表情 */
+        .capoo-face {
+            position: absolute;
+            top: 35px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+        }
+        .capoo-face::before {
+            content: '•  .  •';
+            font-size: 26px;
+            font-weight: bold;
+            color: #fff;
+            letter-spacing: 2px;
+            display: block;
+            margin-top: -6px;
+        }
+        
         .header h1 { margin: 0; font-size: 24px; color: var(--text); font-weight: bold; letter-spacing: 1px; }
 
         .form-group { margin-bottom: 18px; }
@@ -71,7 +110,7 @@
 
         input, select, textarea { 
             width: 100%; padding: 12px 16px; border: 1.5px solid #cfd8dc; border-radius: 14px;
-            font-size: 16px; box-sizing: border-box; transition: all 0.3s; background: rgba(255, 255, 255, 0.75);
+            font-size: 16px; box-sizing: border-box; transition: all 0.3s; background: rgba(255, 255, 255, 0.8);
             color: var(--text);
         }
         input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(41, 182, 246, 0.15); }
@@ -110,7 +149,9 @@
 
     <div class="app-card">
         <div class="header">
-            <i class="fas fa-paw"></i>
+            <div class="capoo-avatar">
+                <div class="capoo-face"></div>
+            </div>
             <h1>零用金報帳系統ww</h1>
         </div>
 
