@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>零用金報帳系統ww</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="apple-touch-icon" href="https://img.icons8.com/fluent/180/000000/cat-footprint.png">
+    
     <style>
         :root {
             --primary: #29b6f6;
@@ -65,7 +68,6 @@
             cursor: pointer;
         }
 
-        /* 🛠️ 核心對齊修改：精準鎖定 100% 寬度，並扣除內襯 Padding 的擠壓 */
         input, select, textarea { 
             width: 100%; 
             max-width: 100%;
@@ -80,10 +82,9 @@
             display: block;
         }
         
-        /* 📱 專為 iOS Safari 修正：強制消除內建日期控制器的多餘右邊距 */
         input[type="date"] {
             -webkit-appearance: none;
-            min-height: 47px; /* 保持與 Select 對齊的高度 */
+            min-height: 47px; 
         }
         
         input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(41, 182, 246, 0.15); }
@@ -326,11 +327,3 @@
                 }
             } catch (error) {
                 alert('⚠️ 系統錯誤：' + error.message);
-            } finally {
-                btn.disabled = false;
-                loader.style.display = 'none';
-            }
-        };
-    </script>
-</body>
-</html>
