@@ -249,7 +249,7 @@
             let val = noteInput.value.trim();
             if (category === '午餐' && val !== "") {
                 if (/^\d+$/.test(val)) {
-                    noteInput.value = `<${val}人>`;
+                    noteInput.value = `${val}人`;
                 }
             }
         }
