@@ -238,7 +238,7 @@
         function handleCategoryChange() {
             const category = document.getElementById('category').value;
             const noteInput = document.getElementById('note');
-            if (category === '午餐') {
+            if (['午餐', '值班餐費', '加班餐費'].includes(category)) {
                 noteInput.placeholder = "請輸入人數數字 (例如: 10)";
                 noteInput.inputMode = "numeric";
             } else {
@@ -251,7 +251,7 @@
             const category = document.getElementById('category').value;
             const noteInput = document.getElementById('note');
             let val = noteInput.value.trim();
-            if (category === '午餐' && val !== "") {
+            if (['午餐', '值班餐費', '加班餐費'].includes(category) && val !== "") {
                 if (/^\d+$/.test(val)) {
                     noteInput.value = `${val}人`;
                 }
